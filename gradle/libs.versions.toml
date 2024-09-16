@@ -1,0 +1,39 @@
+[versions]
+agp = "8.6.0"
+constraintlayout = "2.1.4"
+kotlin = "2.0.20"
+coreKtx = "1.13.1"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+kotlinxSerializationJson = "1.7.2"
+material = "1.12.0"
+matrixlib = "1.0.2"
+jupiter = "5.11.0"
+navigationFragmentKtx = "2.7.7"
+preferenceKtx = "1.2.1"
+vectordrawable = "1.2.0"
+
+[libraries]
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preferenceKtx" }
+androidx-vectordrawable = { module = "androidx.vectordrawable:vectordrawable", version.ref = "vectordrawable" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+matrixlib = { module = "io.github.pdvrieze.matrixlib:matrixlib", version.ref = "matrixlib" }
+jupiter-api = { module="org.junit.jupiter:junit-jupiter-api", version.ref="jupiter" }
+jupiter-engine = { module="org.junit.jupiter:junit-jupiter-engine", version.ref="jupiter" }
+jupiter-parameters = { module="org.junit.jupiter:junit-jupiter-params", version.ref="jupiter" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version = "1.9.20"}
+

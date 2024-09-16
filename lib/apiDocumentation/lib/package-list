@@ -1,0 +1,32 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib////PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.GameOverListener///PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-game-over-listener/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.GameOverListener/onGameOver/#uk.ac.bournemouth.ap.floodit.lib.FlooditGame#kotlin.Int#kotlin.Boolean/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-game-over-listener/on-game-over.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.GamePlayListener///PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-game-play-listener/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.GamePlayListener/onGameChanged/#uk.ac.bournemouth.ap.floodit.lib.FlooditGame#kotlin.Int/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-game-play-listener/on-game-changed.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.State.LOST///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-state/-l-o-s-t/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.State.RUNNING///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-state/-r-u-n-n-i-n-g/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.State.WON///PointingToDeclaration/{"org.jetbrains.dokka.links.EnumEntryDRIExtra":{"key":"org.jetbrains.dokka.links.EnumEntryDRIExtra"}}lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-state/-w-o-n/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.State///PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-state/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.State/entries/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-state/entries.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.State/valueOf/#kotlin.String/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-state/value-of.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame.State/values/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/-state/values.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame///PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/index.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/addGameOverListener/#uk.ac.bournemouth.ap.floodit.lib.FlooditGame.GameOverListener/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/add-game-over-listener.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/addGamePlayListener/#uk.ac.bournemouth.ap.floodit.lib.FlooditGame.GamePlayListener/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/add-game-play-listener.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/colourCount/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/colour-count.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/get/#kotlin.Int#kotlin.Int/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/get.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/height/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/height.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/iterator/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/iterator.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/maxTurns/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/max-turns.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/notifyMove/#kotlin.Int/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/notify-move.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/notifyWin/#kotlin.Int/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/notify-win.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/playColour/#kotlin.Int/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/play-colour.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/removeGameOverListener/#uk.ac.bournemouth.ap.floodit.lib.FlooditGame.GameOverListener/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/remove-game-over-listener.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/removeGamePlayListener/#uk.ac.bournemouth.ap.floodit.lib.FlooditGame.GamePlayListener/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/remove-game-play-listener.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/round/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/round.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/state/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/state.html
+$dokka.location:uk.ac.bournemouth.ap.floodit.lib/FlooditGame/width/#/PointingToDeclaration/lib/uk.ac.bournemouth.ap.floodit.lib/-floodit-game/width.html
+uk.ac.bournemouth.ap.floodit.lib
+
