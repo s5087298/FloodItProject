@@ -5,10 +5,10 @@ import uk.ac.bournemouth.ap.lib.matrix.Matrix
 import javax.swing.Box
 
 class StudentFlooditGame(
-    override val width: Int,
-    override val height: Int,
-    override val maxTurns: Int,
-    override val colourCount: Int
+    override val width: Int = 5,
+    override val height: Int = 5,
+    override val maxTurns: Int = 70,
+    override val colourCount: Int = 6
 ) : FlooditGame {
     val boxes: Matrix<box> = Matrix(width, height) { x: Int, y: Int -> box(x,y)}
     inner class box(val boxX: Int,val boxY: Int){

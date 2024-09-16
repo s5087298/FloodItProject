@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.vectordrawable)
     implementation(libs.material)
     implementation(libs.matrixlib)
+    implementation(libs.androidx.activity)
 
     testImplementation(libs.jupiter.api)
     testImplementation(libs.jupiter.parameters)
