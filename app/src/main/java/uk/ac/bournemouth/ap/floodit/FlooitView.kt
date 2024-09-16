@@ -70,8 +70,8 @@ class FlooitView: View {
         var canvasWidth = width.toFloat()
         var canvasHeight = height.toFloat()
 
-        var squareSpacingX = canvasWidth/(game.height)
-        var squareSpacingY = canvasHeight/(game.width)
+        var squareSpacingX = canvasWidth/(game.height+1)
+        var squareSpacingY = canvasHeight/(game.width+1)
 
         var spaceFromTop = squareSpacingY/2
         var spaceFromLeft = squareSpacingX/2
@@ -81,7 +81,7 @@ class FlooitView: View {
         for (row in 0 until  game.width){
             val currentBox = game.boxes.iterator()
             val y = ((squareSpacingY) * (row)) + spaceFromTop
-            val yEnd = ((squareSpacingY+1) * (row)) + spaceFromTop
+            val yEnd = ((squareSpacingY) * (row+1)) + spaceFromTop
             for (col in 0 until game.height){
                 val x = ((squareSpacingX) * (col)) + spaceFromLeft
                 val xEnd = ((squareSpacingX) * (col+1)) + spaceFromLeft
