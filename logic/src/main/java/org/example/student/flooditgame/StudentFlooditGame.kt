@@ -13,12 +13,12 @@ class StudentFlooditGame(
     val boxes: Matrix<box> = Matrix(width, height) { x: Int, y: Int -> box(x,y)}
     inner class box(val boxX: Int,val boxY: Int){
         var ColorId: Int = (0..colourCount-1).random()
-        var adjacentBoxesCoordinates: List<Pair<Int,Int>> get() {
-            when {
-                boxX==width && boxY==height -> return listOf(Pair(boxX-1,boxY),Pair(boxX,boxY-1))
-                boxX==width -> return listOf(Pair(boxX-1,boxY),Pair(boxX,boxY-1),Pair(boxX,boxY+1))
-                boxY==height -> return listOf(Pair(boxX-1,boxY),Pair(boxX,boxY-1),Pair(boxX+1,boxY))
-            }
+        val adjacentBoxesCoordinates: List<Pair<Int,Int>>
+            get() {
+            val list: List<Pair<Int,Int>> = listOf(Pair(boxX-1,boxY),Pair(boxX+1,boxY),Pair(boxX,boxY+1),Pair(boxX-1,boxY-1))
+            val finalList = mutableListOf<Pair<Int,Int>>()
+            finalList.addAll(list.filter {boxes.isValid(it.first,it.second)})
+            return finalList
         }
     }
     override var round: Int = 0
@@ -33,7 +33,21 @@ class StudentFlooditGame(
     }
 
     override fun playColour(clr: Int) {
-        TODO("Not yet implemented")
+        var adjacentBoxes: MutableList<box> = mutableListOf(boxes[0, 0])
+        var repeat = true
+        while (repeat == true) {
+            for (box in adjacentBoxes) {
+                for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
+                    if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].ColorId == box.ColorId)
+                        if (adjacentBoxes.indexOf(boxes[adjacentCoordinates.first, adjacentCoordinates.second]) == -1) {
+                            adjacentBoxes.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second])
+                        } else repeat = false
+                }
+            }
+        }
+        for (box in adjacentBoxes){
+            box.ColorId=clr
+        }
     }
 
     override fun addGamePlayListener(listener: FlooditGame.GamePlayListener) {
