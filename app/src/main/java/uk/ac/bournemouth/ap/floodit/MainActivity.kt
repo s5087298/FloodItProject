@@ -25,5 +25,6 @@ class MainActivity : AppCompatActivity() {
         )
         val topLayout = findViewById<LinearLayout>(R.id.topLayout)
         topLayout.addView(FloodItView)
+        supportActionBar?.hide()
     }
 }
