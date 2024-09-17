@@ -35,13 +35,13 @@ class StudentFlooditGame(
     override fun playColour(clr: Int) {
         var adjacentBoxes: MutableList<box> = mutableListOf(boxes[0, 0])
         var repeat = true
-        while (repeat == true) {
+        while (repeat) {
             for (box in adjacentBoxes) {
                 for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
                     if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].ColorId == box.ColorId)
                         if (adjacentBoxes.indexOf(boxes[adjacentCoordinates.first, adjacentCoordinates.second]) == -1) {
                             adjacentBoxes.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second])
-                        } else repeat = false
+                        }
                 }
             }
         }

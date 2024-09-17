@@ -74,7 +74,7 @@ class FlooitView: View {
         val gameWidth = game.width.toFloat()
         val gameHeight = game.height.toFloat()
         if (x<canvasWidth*(gameWidth/(gameWidth+1))+canvasWidth/((gameWidth+1)*2) && y<canvasHeight*(gameHeight/(gameHeight+1))+canvasHeight/(gameHeight*2)){
-           return game.boxes[((x-canvasWidth/((gameWidth+1)*2))/((canvasWidth-canvasWidth/((gameWidth+1)*2))/gameWidth)).toInt(),((y-canvasHeight/((gameHeight+1)*2))/((canvasHeight-canvasHeight/((gameHeight+1)*2))/gameHeight)).toInt()]
+           return game.boxes[((y-canvasHeight/((gameHeight+1)*2))/((canvasHeight-canvasHeight/((gameHeight+1)))/gameHeight)).toInt(),((x-canvasWidth/((gameWidth+1)*2))/((canvasWidth-canvasWidth/((gameWidth+1)))/gameWidth)).toInt()]
        }
         else return null
     }
@@ -122,14 +122,15 @@ class FlooitView: View {
 
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    //if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null){
-                    //    game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId)
-                    //}
+                    if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null){
+                        game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId)
+                    }
+                    invalidate()
                     //val lineTouche2 = Snackbar
                     //    .make(this@FlooitView, , Snackbar.LENGTH_SHORT)
                     //    .show()
                     val lineTouche = Snackbar
-                        .make(this@FlooitView, "${e.x} ${e.y} $viewWidth $viewHeight"+" |||| "+coordinateChecker(e.x,e.y,viewWidth.toFloat(),viewHeight.toFloat()), Snackbar.LENGTH_SHORT)
+                        .make(this@FlooitView, "${coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId}, ${game.boxes[0,1].ColorId},${game.boxes[0,2].ColorId},${game.boxes[0,3].ColorId},${game.boxes[0,4].ColorId} ,"+coordinateChecker(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat()), Snackbar.LENGTH_SHORT)
                         .show()
                     return true
                 }
