@@ -69,10 +69,18 @@ class FlooitView: View {
             else -> color7
         }
     }
-    private lateinit var gestureDetector: GestureDetector
-    // fun coordinateConverter(x: Float,y: Float): StudentFlooditGame.box {}
+    private lateinit var gestureDetector: GestureDetectorCompat
+    fun coordinateConverter(x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): StudentFlooditGame.box? {
+       if (x<canvasWidth*(game.width/(game.width+1))+canvasWidth/(game.width*2) && y<canvasHeight*(game.height/(game.height+1))+canvasHeight/(game.height*2)){
+           return game.boxes[(canvasWidth-canvasWidth/(game.width*2)/(x-canvasWidth/(game.width*2))).toInt(),(canvasHeight-canvasHeight/(game.height*2)/(x-canvasHeight/(game.height*2))).toInt()]
+       }
+        else return null
+    }
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+        if(::gestureDetector.isInitialized){
+            gestureDetector.onTouchEvent(event)
+        }
+        return true
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -102,7 +110,7 @@ class FlooitView: View {
         post {
             val viewWidth = this.width
             val viewHeight = this.height
-            val gestureDetector = GestureDetectorCompat(context, object:
+            gestureDetector = GestureDetectorCompat(context, object:
                 GestureDetector.SimpleOnGestureListener(){
 
                 override fun onDown(e: MotionEvent): Boolean = true
