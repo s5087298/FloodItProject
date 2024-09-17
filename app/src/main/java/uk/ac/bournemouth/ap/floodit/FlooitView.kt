@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.core.view.GestureDetectorCompat
 import com.google.android.material.snackbar.Snackbar
 import org.example.student.flooditgame.StudentFlooditGame
@@ -20,7 +22,13 @@ class FlooitView: View {
         attrs,
         defStyleAttr
     )
-    var game: StudentFlooditGame = StudentFlooditGame()
+    private lateinit var spinner: Spinner
+    val game: StudentFlooditGame get() { if(::spinner.isInitialized){
+        return StudentFlooditGame(spinner.selectedItem.toString().split("x")[0].toInt(),spinner.selectedItem.toString().split("x")[1].toInt())
+    }
+        else return StudentFlooditGame()
+    }
+
     private val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.WHITE
@@ -114,7 +122,14 @@ class FlooitView: View {
         }
     }
     init {
+        val activity = context as MainActivity
+        spinner = activity.findViewById<Spinner>(R.id.spinner)
+        val spinnerItems = listOf("5x5","10x10","14x14","18x18")
+        val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = spinnerAdapter
         post {
+            var selectedItem = spinner.selectedItem.toString()
             val viewWidth = this.width
             val viewHeight = this.height
             gestureDetector = GestureDetectorCompat(context, object:
@@ -130,7 +145,7 @@ class FlooitView: View {
                     //    .make(this@FlooitView, , Snackbar.LENGTH_SHORT)
                     //    .show()
                     val lineTouche = Snackbar
-                        .make(this@FlooitView, "${coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId}, ${game.boxes[0,1].ColorId},${game.boxes[0,2].ColorId},${game.boxes[0,3].ColorId},${game.boxes[0,4].ColorId} ,"+coordinateChecker(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat()), Snackbar.LENGTH_SHORT)
+                        .make(this@FlooitView, "${coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId}, ${game.boxes[0,1].ColorId},${game.boxes[0,2].ColorId},${game.boxes[0,3].ColorId},${game.boxes[0,4].ColorId} ,"+coordinateChecker(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat()) + "${spinner.selectedItem} ", Snackbar.LENGTH_SHORT)
                         .show()
                     return true
                 }
