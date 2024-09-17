@@ -74,14 +74,14 @@ class FlooitView: View {
         val gameWidth = game.width.toFloat()
         val gameHeight = game.height.toFloat()
         if (x<canvasWidth*(gameWidth/(gameWidth+1))+canvasWidth/((gameWidth+1)*2) && y<canvasHeight*(gameHeight/(gameHeight+1))+canvasHeight/(gameHeight*2)){
-           return game.boxes[(canvasWidth-canvasWidth/((gameWidth+1)*2)/(x-canvasWidth/((gameWidth+1)*2))).toInt(),(canvasHeight-canvasHeight/((gameHeight+1)*2)/(x-canvasHeight/((gameHeight+1)*2))).toInt()]
+           return game.boxes[((x-canvasWidth/((gameWidth+1)*2))/((canvasWidth-canvasWidth/((gameWidth+1)*2))/gameWidth)).toInt(),((y-canvasHeight/((gameHeight+1)*2))/((canvasHeight-canvasHeight/((gameHeight+1)*2))/gameHeight)).toInt()]
        }
         else return null
     }
     fun coordinateChecker (x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): String {
         val gameWidth = game.width.toFloat()
         val gameHeight = game.height.toFloat()
-        return "${((canvasWidth-canvasWidth/((gameWidth+1)*2))/(x-canvasWidth/((gameWidth+1)*2))).toInt()},${((canvasHeight-canvasHeight/((gameHeight+1)*2))/(x-canvasHeight/((gameHeight+1)*2))).toInt()}"
+        return "${((x-canvasWidth/((gameWidth+1)*2))/((canvasWidth-canvasWidth/((gameWidth+1)))/gameWidth)).toInt()}, ${((y-canvasHeight/((gameHeight+1)*2))/((canvasHeight-canvasHeight/((gameHeight+1)))/gameHeight)).toInt()}"
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if(::gestureDetector.isInitialized){
