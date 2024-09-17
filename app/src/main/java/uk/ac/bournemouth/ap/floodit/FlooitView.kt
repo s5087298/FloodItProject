@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.view.GestureDetectorCompat
@@ -23,11 +24,7 @@ class FlooitView: View {
         defStyleAttr
     )
     private lateinit var spinner: Spinner
-    val game: StudentFlooditGame get() { if(::spinner.isInitialized){
-        return StudentFlooditGame(spinner.selectedItem.toString().split("x")[0].toInt(),spinner.selectedItem.toString().split("x")[1].toInt())
-    }
-        else return StudentFlooditGame()
-    }
+    var game: StudentFlooditGame = StudentFlooditGame()
 
     private val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -128,6 +125,21 @@ class FlooitView: View {
         val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
+        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedItem = parent!!.getItemAtPosition(position).toString()
+                game = StudentFlooditGame(selectedItem.split("x")[0].toInt(),selectedItem.split("x")[1].toInt())
+                invalidate()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
         post {
             var selectedItem = spinner.selectedItem.toString()
             val viewWidth = this.width
