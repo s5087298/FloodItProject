@@ -5,7 +5,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
+import androidx.core.view.GestureDetectorCompat
+import com.google.android.material.snackbar.Snackbar
 import org.example.student.flooditgame.StudentFlooditGame
 
 class FlooitView: View {
@@ -55,15 +59,20 @@ class FlooitView: View {
     }
     fun boxColour(colorIndex: Int): Paint {
         return when (colorIndex) {
-            0    -> color0
-            1    -> color1
-            2    -> color2
-            3    -> color3
-            4    -> color4
-            5    -> color5
-            6    -> color6
-            else    -> color7
+            0 -> color0
+            1 -> color1
+            2 -> color2
+            3 -> color3
+            4 -> color4
+            5 -> color5
+            6 -> color6
+            else -> color7
         }
+    }
+    private lateinit var gestureDetector: GestureDetector
+    // fun coordinateConverter(x: Float,y: Float): StudentFlooditGame.box {}
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -73,8 +82,8 @@ class FlooitView: View {
         var squareSpacingX = canvasWidth/(game.height+1)
         var squareSpacingY = canvasHeight/(game.width+1)
 
-        var spaceFromTop = squareSpacingY/2
         var spaceFromLeft = squareSpacingX/2
+        var spaceFromTop = squareSpacingY/2
 
         canvas.drawRect(0f, 0f, canvasWidth, canvasHeight, gridPaint)
 
@@ -87,6 +96,23 @@ class FlooitView: View {
                 val xEnd = ((squareSpacingX) * (col+1)) + spaceFromLeft
                 canvas.drawRect(x,y,xEnd,yEnd,boxColour(game.boxes[row,col].ColorId))
             }
+        }
+    }
+    init {
+        post {
+            val viewWidth = this.width
+            val viewHeight = this.height
+            val gestureDetector = GestureDetectorCompat(context, object:
+                GestureDetector.SimpleOnGestureListener(){
+
+                override fun onDown(e: MotionEvent): Boolean = true
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    val lineTouche = Snackbar
+                        .make(this@FlooitView, "${e.x} ${e.y}", Snackbar.LENGTH_SHORT)
+                        .show()
+                    return true
+                }
+            })
         }
     }
 }
