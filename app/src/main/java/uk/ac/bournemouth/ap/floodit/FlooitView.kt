@@ -71,7 +71,7 @@ class FlooitView: View {
     }
     private lateinit var gestureDetector: GestureDetectorCompat
     fun coordinateConverter(x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): StudentFlooditGame.box? {
-       if (x<canvasWidth*(game.width/(game.width+1))+canvasWidth/(game.width*2) && y<canvasHeight*(game.height/(game.height+1))+canvasHeight/(game.height*2)){
+       if (x<canvasWidth*(game.width/(game.width+1))+canvasWidth/((game.width+1)*2) && y<canvasHeight*(game.height/(game.height+1))+canvasHeight/(game.height*2)){
            return game.boxes[(canvasWidth-canvasWidth/(game.width*2)/(x-canvasWidth/(game.width*2))).toInt(),(canvasHeight-canvasHeight/(game.height*2)/(x-canvasHeight/(game.height*2))).toInt()]
        }
         else return null
@@ -115,8 +115,11 @@ class FlooitView: View {
 
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null){
+                        game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId)
+                    }
                     val lineTouche = Snackbar
-                        .make(this@FlooitView, "${e.x} ${e.y}", Snackbar.LENGTH_SHORT)
+                        .make(this@FlooitView, "${e.x} ${e.y} $viewWidth $viewHeight", Snackbar.LENGTH_SHORT)
                         .show()
                     return true
                 }
