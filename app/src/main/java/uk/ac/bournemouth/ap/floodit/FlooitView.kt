@@ -71,10 +71,17 @@ class FlooitView: View {
     }
     private lateinit var gestureDetector: GestureDetectorCompat
     fun coordinateConverter(x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): StudentFlooditGame.box? {
-       if (x<canvasWidth*(game.width/(game.width+1))+canvasWidth/((game.width+1)*2) && y<canvasHeight*(game.height/(game.height+1))+canvasHeight/(game.height*2)){
-           return game.boxes[(canvasWidth-canvasWidth/(game.width*2)/(x-canvasWidth/(game.width*2))).toInt(),(canvasHeight-canvasHeight/(game.height*2)/(x-canvasHeight/(game.height*2))).toInt()]
+        val gameWidth = game.width.toFloat()
+        val gameHeight = game.height.toFloat()
+        if (x<canvasWidth*(gameWidth/(gameWidth+1))+canvasWidth/((gameWidth+1)*2) && y<canvasHeight*(gameHeight/(gameHeight+1))+canvasHeight/(gameHeight*2)){
+           return game.boxes[(canvasWidth-canvasWidth/((gameWidth+1)*2)/(x-canvasWidth/((gameWidth+1)*2))).toInt(),(canvasHeight-canvasHeight/((gameHeight+1)*2)/(x-canvasHeight/((gameHeight+1)*2))).toInt()]
        }
         else return null
+    }
+    fun coordinateChecker (x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): String {
+        val gameWidth = game.width.toFloat()
+        val gameHeight = game.height.toFloat()
+        return "${((canvasWidth-canvasWidth/((gameWidth+1)*2))/(x-canvasWidth/((gameWidth+1)*2))).toInt()},${((canvasHeight-canvasHeight/((gameHeight+1)*2))/(x-canvasHeight/((gameHeight+1)*2))).toInt()}"
     }
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if(::gestureDetector.isInitialized){
@@ -115,11 +122,14 @@ class FlooitView: View {
 
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null){
-                        game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId)
-                    }
+                    //if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null){
+                    //    game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId)
+                    //}
+                    //val lineTouche2 = Snackbar
+                    //    .make(this@FlooitView, , Snackbar.LENGTH_SHORT)
+                    //    .show()
                     val lineTouche = Snackbar
-                        .make(this@FlooitView, "${e.x} ${e.y} $viewWidth $viewHeight", Snackbar.LENGTH_SHORT)
+                        .make(this@FlooitView, "${e.x} ${e.y} $viewWidth $viewHeight"+" |||| "+coordinateChecker(e.x,e.y,viewWidth.toFloat(),viewHeight.toFloat()), Snackbar.LENGTH_SHORT)
                         .show()
                     return true
                 }
