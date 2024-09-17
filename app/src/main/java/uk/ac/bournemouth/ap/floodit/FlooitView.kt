@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.core.view.GestureDetectorCompat
 import com.google.android.material.snackbar.Snackbar
 import org.example.student.flooditgame.StudentFlooditGame
@@ -24,6 +25,7 @@ class FlooitView: View {
         defStyleAttr
     )
     private lateinit var spinner: Spinner
+    private lateinit var spinner2: Spinner
     var game: StudentFlooditGame = StudentFlooditGame()
 
     private val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -133,12 +135,44 @@ class FlooitView: View {
                 id: Long
             ) {
                 val selectedItem = parent!!.getItemAtPosition(position).toString()
-                game = StudentFlooditGame(selectedItem.split("x")[0].toInt(),selectedItem.split("x")[1].toInt())
+                if (::spinner2.isInitialized) {
+                    game = StudentFlooditGame(
+                        selectedItem.split("x")[0].toInt(),
+                        selectedItem.split("x")[1].toInt(),
+                        colourCount =  spinner2.selectedItem.toString().toInt()
+                    )
+                } else {
+                    game = StudentFlooditGame(selectedItem.split("x")[0].toInt(),selectedItem.split("x")[1].toInt())
+                }
                 invalidate()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
+        }
+        spinner2 = activity.findViewById<Spinner>(R.id.spinner2)
+        val spinner2Items = listOf(6,5,4,3)
+        val spinner2Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner2Items)
+        spinner2Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner2.adapter = spinner2Adapter
+        spinner2.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedItem = parent!!.getItemAtPosition(position).toString()
+                if (::spinner.isInitialized){
+                    game = StudentFlooditGame(spinner.selectedItem.toString().split("x")[0].toInt(),spinner.selectedItem.toString().split("x")[1].toInt(),colourCount = selectedItem.toInt())
+                } else
+                    game = StudentFlooditGame(colourCount = selectedItem.toInt())
+                invalidate()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
         }
         post {
             var selectedItem = spinner.selectedItem.toString()
@@ -156,9 +190,9 @@ class FlooitView: View {
                     //val lineTouche2 = Snackbar
                     //    .make(this@FlooitView, , Snackbar.LENGTH_SHORT)
                     //    .show()
-                    val lineTouche = Snackbar
-                        .make(this@FlooitView, "${coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId}, ${game.boxes[0,1].ColorId},${game.boxes[0,2].ColorId},${game.boxes[0,3].ColorId},${game.boxes[0,4].ColorId} ,"+coordinateChecker(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat()) + "${spinner.selectedItem} ", Snackbar.LENGTH_SHORT)
-                        .show()
+                    //val lineTouche = Snackbar
+                    //    .make(this@FlooitView, "${coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId}, ${game.boxes[0,1].ColorId},${game.boxes[0,2].ColorId},${game.boxes[0,3].ColorId},${game.boxes[0,4].ColorId} ,"+coordinateChecker(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat()) + "${spinner.selectedItem} ", Snackbar.LENGTH_SHORT)
+                    //    .show()
                     return true
                 }
             })
