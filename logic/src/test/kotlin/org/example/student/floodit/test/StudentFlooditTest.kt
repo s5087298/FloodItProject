@@ -1,5 +1,6 @@
 package org.example.student.floodit.test
 
+import org.example.student.flooditgame.StudentFlooditGame
 import uk.ac.bournemouth.ap.floodit.lib.FlooditGame
 import uk.ac.bournemouth.ap.floodit.test.FlooditTest
 import uk.ac.bournemouth.ap.lib.matrix.int.IntMatrix
@@ -20,7 +21,13 @@ class StudentFlooditTest : FlooditTest() {
      *                 then.
      */
     override fun createGameFromGivenData(colours: IntMatrix, colourCount: Int, maxTurns:Int): FlooditGame {
-        return TODO("Call your constructor such that the configuration matches the parameters here")
+        val game = StudentFlooditGame(width = colours.width, height = colours.height, colourCount=colourCount, maxTurns = maxTurns)
+        for (coloursX in 0 until colours.width){
+            for (coloursY in 0 until colours.height){
+                game.boxes[coloursX,coloursY].colorId = colours[coloursX,coloursY]
+            }
+        }
+        return game
     }
 
     /**
@@ -34,6 +41,6 @@ class StudentFlooditTest : FlooditTest() {
      *                 then.
      */
     override fun createRandomGame(width: Int, height: Int, colourCount: Int, maxTurns: Int, random: Random): FlooditGame {
-        return TODO("Call your constructor such that the configuration matches the parameters here")
+        return StudentFlooditGame(width=width, height=height, colourCount=colourCount, maxTurns = maxTurns)
     }
 }
