@@ -128,6 +128,7 @@ class FlooitView: View {
         val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
+        spinner.setSelection(1)
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -155,10 +156,11 @@ class FlooitView: View {
         }
 
         spinner2 = activity.findViewById<Spinner>(R.id.spinner2)
-        val spinner2Items = listOf(6,5,4,3)
+        val spinner2Items = listOf(3,4,5,6)
         val spinner2Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner2Items)
         spinner2Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner2.adapter = spinner2Adapter
+        spinner2.setSelection(3)
         spinner2.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
