@@ -15,7 +15,12 @@ class StudentFlooditGame(
         var ColorId: Int = (0..colourCount-1).random()
         val adjacentBoxesCoordinates: List<Pair<Int,Int>>
             get() {
-            val list: List<Pair<Int,Int>> = listOf(Pair(boxX-1,boxY),Pair(boxX+1,boxY),Pair(boxX,boxY+1),Pair(boxX-1,boxY-1))
+            val list: List<Pair<Int,Int>> =
+                listOf(
+                    Pair(boxX-1,boxY),
+                    Pair(boxX+1,boxY),
+                    Pair(boxX,boxY+1),
+                    Pair(boxX-1,boxY-1))
             val finalList = mutableListOf<Pair<Int,Int>>()
             finalList.addAll(list.filter {boxes.isValid(it.first,it.second)})
             return finalList
@@ -35,8 +40,9 @@ class StudentFlooditGame(
     override fun playColour(clr: Int) {
         var adjacentBoxes: MutableList<box> = mutableListOf(boxes[0, 0])
         var repeat = true
-        for (repeat in 0 until 10) {
-            for (box in adjacentBoxes.toList()) {
+        while (repeat) {
+            var adjacentBoxesList = adjacentBoxes.toList()
+            for (box in adjacentBoxesList) {
                 for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
                     if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].ColorId == box.ColorId) {
                         if (adjacentBoxes.indexOf(boxes[adjacentCoordinates.first, adjacentCoordinates.second]) == -1) {
@@ -44,6 +50,9 @@ class StudentFlooditGame(
                         }
                     }
                 }
+            }
+            if (adjacentBoxes == adjacentBoxesList) {
+                repeat = false
             }
         }
         for (box in adjacentBoxes){
