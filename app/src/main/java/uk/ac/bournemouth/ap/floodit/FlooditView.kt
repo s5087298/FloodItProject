@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.view.GestureDetectorCompat
 import org.example.student.flooditgame.StudentFlooditGame
+import uk.ac.bournemouth.ap.floodit.lib.FlooditGame
 
 class FlooditView: View {
     constructor(context: Context?) : super(context)
@@ -170,7 +171,8 @@ class FlooditView: View {
                 game = if (::spinner.isInitialized){
                     StudentFlooditGame(
                         spinner.selectedItem.toString().split("x")[0].toInt(),
-                        spinner.selectedItem.toString().split("x")[1].toInt(),colourCount = selectedItem.toInt())
+                        spinner.selectedItem.toString().split("x")[1].toInt(),
+                        colourCount = selectedItem.toInt())
                 } else
                     StudentFlooditGame(colourCount = selectedItem.toInt())
                 invalidate()
@@ -188,7 +190,8 @@ class FlooditView: View {
 
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null){
+                    if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null &&
+                        game.state==FlooditGame.State.RUNNING){
                         game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colorId)
                     }
                     invalidate()

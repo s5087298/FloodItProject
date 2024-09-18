@@ -10,7 +10,7 @@ class StudentFlooditGame(
     override val colourCount: Int = 6,
 ) : FlooditGame {
     val boxes: Matrix<Box> = Matrix(width, height) { x: Int, y: Int -> Box(x,y)}
-    inner class Box(val boxX: Int, val boxY: Int){
+    inner class Box(private val boxX: Int, private val boxY: Int){
         var colorId: Int = (0..<colourCount).random()
         val adjacentBoxesCoordinates: List<Pair<Int,Int>>
             get() {
@@ -56,6 +56,11 @@ class StudentFlooditGame(
         for (box in adjacentBoxes){
             box.colorId=clr
         }
+        notifyMove(round)
+        if (round>=maxTurns || boxes.all { it.colorId == clr})  {
+            notifyWin(round)
+        } else
+            round++
     }
     private val onGameOverListeners = mutableListOf<FlooditGame.GameOverListener>()
     private val onGamePlayListeners = mutableListOf<FlooditGame.GamePlayListener>()
@@ -78,7 +83,7 @@ class StudentFlooditGame(
 
     override fun notifyWin(round: Int) {
         for(listener in onGameOverListeners) {
-            listener.onGameOver(this, this.round, (round>maxTurns))
+            listener.onGameOver(this, this.round, (round<=maxTurns))
         }
     }
 
