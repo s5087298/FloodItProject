@@ -18,13 +18,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val FloodItView = FlooitView(this)
-        FloodItView.layoutParams = ViewGroup.LayoutParams(
+        val floodItView = FlooditView(this)
+        floodItView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         val topLayout = findViewById<LinearLayout>(R.id.topLayout)
-        topLayout.addView(FloodItView)
+        topLayout.addView(floodItView)
         supportActionBar?.hide()
     }
 }

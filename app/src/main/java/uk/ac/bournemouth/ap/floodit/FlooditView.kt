@@ -11,12 +11,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import androidx.core.view.GestureDetectorCompat
-import com.google.android.material.snackbar.Snackbar
 import org.example.student.flooditgame.StudentFlooditGame
 
-class FlooitView: View {
+class FlooditView: View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -24,8 +22,10 @@ class FlooitView: View {
         attrs,
         defStyleAttr
     )
+
     private lateinit var spinner: Spinner
     private lateinit var spinner2: Spinner
+
     var game: StudentFlooditGame = StudentFlooditGame()
 
     private val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -65,7 +65,7 @@ class FlooitView: View {
         color = Color.BLACK
     }
 
-    fun boxColour(colorIndex: Int): Paint {
+    private fun boxColour(colorIndex: Int): Paint {
         return when (colorIndex) {
             0 -> color0
             1 -> color1
@@ -80,16 +80,15 @@ class FlooitView: View {
 
     private lateinit var gestureDetector: GestureDetectorCompat
 
-    fun coordinateConverter(x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): StudentFlooditGame.box? {
+    fun coordinateConverter(x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): StudentFlooditGame.Box? {
         val gameWidth = game.width.toFloat()
         val gameHeight = game.height.toFloat()
-        if (x<canvasWidth*(gameWidth/(gameWidth+1))+canvasWidth/((gameWidth+1)*2) &&
+        return if (x<canvasWidth*(gameWidth/(gameWidth+1))+canvasWidth/((gameWidth+1)*2) &&
             y<canvasHeight*(gameHeight/(gameHeight+1))+canvasHeight/(gameHeight*2)){
-           return game.boxes[
-               ((y-canvasHeight/((gameHeight+1)*2))/((canvasHeight-canvasHeight/((gameHeight+1)))/gameHeight)).toInt(),
-               ((x-canvasWidth/((gameWidth+1)*2))/((canvasWidth-canvasWidth/((gameWidth+1)))/gameWidth)).toInt()]
-       }
-        else return null
+            game.boxes[
+                ((y-canvasHeight/((gameHeight+1)*2))/((canvasHeight-canvasHeight/((gameHeight+1)))/gameHeight)).toInt(),
+                ((x-canvasWidth/((gameWidth+1)*2))/((canvasWidth-canvasWidth/((gameWidth+1)))/gameWidth)).toInt()]
+        } else null
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -100,14 +99,14 @@ class FlooitView: View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        var canvasWidth = width.toFloat()
-        var canvasHeight = height.toFloat()
+        val canvasWidth = width.toFloat()
+        val canvasHeight = height.toFloat()
 
-        var squareSpacingX = canvasWidth/(game.height+1)
-        var squareSpacingY = canvasHeight/(game.width+1)
+        val squareSpacingX = canvasWidth/(game.height+1)
+        val squareSpacingY = canvasHeight/(game.width+1)
 
-        var spaceFromLeft = squareSpacingX/2
-        var spaceFromTop = squareSpacingY/2
+        val spaceFromLeft = squareSpacingX/2
+        val spaceFromTop = squareSpacingY/2
 
         canvas.drawRect(0f, 0f, canvasWidth, canvasHeight, gridPaint)
 
@@ -117,13 +116,13 @@ class FlooitView: View {
             for (col in 0 until game.height){
                 val x = ((squareSpacingX) * (col)) + spaceFromLeft
                 val xEnd = ((squareSpacingX) * (col+1)) + spaceFromLeft
-                canvas.drawRect(x,y,xEnd,yEnd,boxColour(game.boxes[row,col].ColorId))
+                canvas.drawRect(x,y,xEnd,yEnd,boxColour(game.boxes[row,col].colorId))
             }
         }
     }
     init {
         val activity = context as MainActivity
-        spinner = activity.findViewById<Spinner>(R.id.spinner)
+        spinner = activity.findViewById(R.id.spinner)
         val spinnerItems = listOf("5x5","10x10","14x14","18x18")
         val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -137,25 +136,24 @@ class FlooitView: View {
                 id: Long
             ) {
                 val selectedItem = parent!!.getItemAtPosition(position).toString()
-                if (::spinner2.isInitialized) {
-                    game = StudentFlooditGame(
+                game = if (::spinner2.isInitialized) {
+                    StudentFlooditGame(
                         selectedItem.split("x")[0].toInt(),
                         selectedItem.split("x")[1].toInt(),
                         colourCount =  spinner2.selectedItem.toString().toInt()
                     )
                 } else {
-                    game = StudentFlooditGame(
+                    StudentFlooditGame(
                         selectedItem.split("x")[0].toInt(),
                         selectedItem.split("x")[1].toInt())
                 }
                 invalidate()
             }
-
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
 
-        spinner2 = activity.findViewById<Spinner>(R.id.spinner2)
+        spinner2 = activity.findViewById(R.id.spinner2)
         val spinner2Items = listOf(3,4,5,6)
         val spinner2Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner2Items)
         spinner2Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -169,12 +167,12 @@ class FlooitView: View {
                 id: Long
             ) {
                 val selectedItem = parent!!.getItemAtPosition(position).toString()
-                if (::spinner.isInitialized){
-                    game = StudentFlooditGame(
+                game = if (::spinner.isInitialized){
+                    StudentFlooditGame(
                         spinner.selectedItem.toString().split("x")[0].toInt(),
                         spinner.selectedItem.toString().split("x")[1].toInt(),colourCount = selectedItem.toInt())
                 } else
-                    game = StudentFlooditGame(colourCount = selectedItem.toInt())
+                    StudentFlooditGame(colourCount = selectedItem.toInt())
                 invalidate()
             }
 
@@ -191,7 +189,7 @@ class FlooitView: View {
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
                     if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null){
-                        game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.ColorId)
+                        game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colorId)
                     }
                     invalidate()
                     return true

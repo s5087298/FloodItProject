@@ -2,17 +2,16 @@ package org.example.student.flooditgame
 
 import uk.ac.bournemouth.ap.floodit.lib.FlooditGame
 import uk.ac.bournemouth.ap.lib.matrix.Matrix
-import javax.swing.Box
 
 class StudentFlooditGame(
     override val width: Int = 5,
     override val height: Int = 5,
-    override val maxTurns: Int = 70,
-    override val colourCount: Int = 6
+    override val maxTurns: Int = 40,
+    override val colourCount: Int = 6,
 ) : FlooditGame {
-    val boxes: Matrix<box> = Matrix(width, height) { x: Int, y: Int -> box(x,y)}
-    inner class box(val boxX: Int,val boxY: Int){
-        var ColorId: Int = (0..colourCount-1).random()
+    val boxes: Matrix<Box> = Matrix(width, height) { x: Int, y: Int -> Box(x,y)}
+    inner class Box(val boxX: Int, val boxY: Int){
+        var colorId: Int = (0..<colourCount).random()
         val adjacentBoxesCoordinates: List<Pair<Int,Int>>
             get() {
             val list: List<Pair<Int,Int>> =
@@ -30,21 +29,20 @@ class StudentFlooditGame(
     override var state: FlooditGame.State = FlooditGame.State.RUNNING
 
     override fun get(x: Int, y: Int): Int {
-        if (boxes.isValid(x,y)){
-            return boxes[x,y].ColorId
-        }
-        else
-            return -1
+        return if (boxes.isValid(x,y)){
+            boxes[x,y].colorId
+        } else
+            -1
     }
 
     override fun playColour(clr: Int) {
-        var adjacentBoxes: MutableList<box> = mutableListOf(boxes[0, 0])
+        val adjacentBoxes: MutableList<Box> = mutableListOf(boxes[0, 0])
         var repeat = true
         while (repeat) {
-            var adjacentBoxesList = adjacentBoxes.toList()
+            val adjacentBoxesList = adjacentBoxes.toList()
             for (box in adjacentBoxesList) {
                 for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
-                    if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].ColorId == box.ColorId) {
+                    if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].colorId == box.colorId) {
                         if (adjacentBoxes.indexOf(boxes[adjacentCoordinates.first, adjacentCoordinates.second]) == -1) {
                             adjacentBoxes.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second])
                         }
@@ -56,32 +54,37 @@ class StudentFlooditGame(
             }
         }
         for (box in adjacentBoxes){
-            box.ColorId=clr
+            box.colorId=clr
         }
+    }
+    private val onGameOverListeners = mutableListOf<FlooditGame.GameOverListener>()
+    private val onGamePlayListeners = mutableListOf<FlooditGame.GamePlayListener>()
+
+    override fun addGameOverListener(listener: FlooditGame.GameOverListener) {
+        onGameOverListeners.add(listener)
     }
 
     override fun addGamePlayListener(listener: FlooditGame.GamePlayListener) {
-        TODO("Not yet implemented")
+        onGamePlayListeners.add(listener)
+    }
+
+    override fun removeGameOverListener(listener: FlooditGame.GameOverListener) {
+        onGameOverListeners.remove(listener)
     }
 
     override fun removeGamePlayListener(listener: FlooditGame.GamePlayListener) {
-        TODO("Not yet implemented")
-    }
-
-    override fun addGameOverListener(gameOverListener: FlooditGame.GameOverListener) {
-        TODO("Not yet implemented")
-    }
-
-    override fun removeGameOverListener(gameOverListener: FlooditGame.GameOverListener) {
-        TODO("Not yet implemented")
-    }
-
-    override fun notifyMove(round: Int) {
-        TODO("Not yet implemented")
+        onGamePlayListeners.remove(listener)
     }
 
     override fun notifyWin(round: Int) {
-        TODO("Not yet implemented")
+        for(listener in onGameOverListeners) {
+            listener.onGameOver(this, this.round, (round>maxTurns))
+        }
     }
 
+    override fun notifyMove(round: Int) {
+        for(listener in onGamePlayListeners) {
+            listener.onGameChanged(this, this.round)
+        }
+    }
 }
