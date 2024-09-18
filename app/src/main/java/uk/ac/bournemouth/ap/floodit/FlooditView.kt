@@ -129,35 +129,14 @@ class FlooditView: View {
     init {
         val activity = context as MainActivity
 
+        roundText = activity.findViewById(R.id.textView)
+
         spinner = activity.findViewById(R.id.spinner)
         val spinnerItems = listOf("5x5","10x10","14x14","18x18")
         val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
         spinner.setSelection(1)
-        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = parent!!.getItemAtPosition(position).toString()
-                game = if (::spinner2.isInitialized) {
-                    StudentFlooditGame(
-                        selectedItem.split("x")[0].toInt(),
-                        selectedItem.split("x")[1].toInt(),
-                        colourCount =  spinner2.selectedItem.toString().toInt()
-                    )
-                } else {
-                    StudentFlooditGame(
-                        selectedItem.split("x")[0].toInt(),
-                        selectedItem.split("x")[1].toInt())
-                }
-                invalidate()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
 
         spinner2 = activity.findViewById(R.id.spinner2)
         val spinner2Items = listOf(3,4,5,6)
@@ -165,25 +144,6 @@ class FlooditView: View {
         spinner2Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner2.adapter = spinner2Adapter
         spinner2.setSelection(3)
-        spinner2.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = parent!!.getItemAtPosition(position).toString()
-                game = if (::spinner.isInitialized){
-                    StudentFlooditGame(
-                        spinner.selectedItem.toString().split("x")[0].toInt(),
-                        spinner.selectedItem.toString().split("x")[1].toInt(),
-                        colourCount = selectedItem.toInt())
-                } else
-                    StudentFlooditGame(colourCount = selectedItem.toInt())
-                invalidate()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
 
         spinner3 = activity.findViewById(R.id.spinner3)
         val spinner3Items = listOf(20,30,40,50,60,70)
@@ -191,25 +151,6 @@ class FlooditView: View {
         spinner3Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner3.adapter = spinner3Adapter
         spinner3.setSelection(2)
-        spinner3.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = parent!!.getItemAtPosition(position).toString()
-                //game = if (::spinner.isInitialized){
-                //    StudentFlooditGame(
-                //        spinner.selectedItem.toString().split("x")[0].toInt(),
-                //        spinner.selectedItem.toString().split("x")[1].toInt(),
-                //        colourCount = selectedItem.toInt())
-                //} else
-                //    StudentFlooditGame(colourCount = selectedItem.toInt())
-                invalidate()
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
 
         restartButton = activity.findViewById(R.id.restartButton)
         restartButton.setOnClickListener{
@@ -254,11 +195,13 @@ class FlooditView: View {
                 else -> StudentFlooditGame()
 
             }
+            invalidate()
+            roundText.setText("${game.round}/${game.maxTurns}")
         }
+        restartButton.performClick()
         post {
             val viewWidth = this.width
             val viewHeight = this.height
-            roundText = activity.findViewById(R.id.textView)
             roundText.setText("${game.round}/${game.maxTurns}")
             gestureDetector = GestureDetectorCompat(context, object:
                 GestureDetector.SimpleOnGestureListener(){
