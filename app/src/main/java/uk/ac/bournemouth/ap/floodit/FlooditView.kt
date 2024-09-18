@@ -8,7 +8,6 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -26,9 +25,9 @@ class FlooditView: View {
         defStyleAttr
     )
 
-    private lateinit var spinner: Spinner
-    private lateinit var spinner2: Spinner
-    private lateinit var spinner3: Spinner
+    private lateinit var gridSizeSpinner: Spinner
+    private lateinit var colourAmountSpinner: Spinner
+    private lateinit var maxTurnSpinner: Spinner
     private lateinit var roundText: TextView
     private lateinit var restartButton: Button
 
@@ -131,66 +130,66 @@ class FlooditView: View {
 
         roundText = activity.findViewById(R.id.textView)
 
-        spinner = activity.findViewById(R.id.spinner)
+        gridSizeSpinner = activity.findViewById(R.id.gridSizeSpinner)
         val spinnerItems = listOf("5x5","10x10","14x14","18x18")
         val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = spinnerAdapter
-        spinner.setSelection(1)
+        gridSizeSpinner.adapter = spinnerAdapter
+        gridSizeSpinner.setSelection(1)
 
-        spinner2 = activity.findViewById(R.id.spinner2)
+        colourAmountSpinner = activity.findViewById(R.id.colourAmountSpinner)
         val spinner2Items = listOf(3,4,5,6)
         val spinner2Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner2Items)
         spinner2Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner2.adapter = spinner2Adapter
-        spinner2.setSelection(3)
+        colourAmountSpinner.adapter = spinner2Adapter
+        colourAmountSpinner.setSelection(3)
 
-        spinner3 = activity.findViewById(R.id.spinner3)
+        maxTurnSpinner = activity.findViewById(R.id.maxTurnSpinner)
         val spinner3Items = listOf(20,30,40,50,60,70)
         val spinner3Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner3Items)
         spinner3Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner3.adapter = spinner3Adapter
-        spinner3.setSelection(2)
+        maxTurnSpinner.adapter = spinner3Adapter
+        maxTurnSpinner.setSelection(2)
 
         restartButton = activity.findViewById(R.id.restartButton)
         restartButton.setOnClickListener{
             game = when {
-                (::spinner.isInitialized) && (::spinner2.isInitialized) && (::spinner3.isInitialized) ->
+                (::gridSizeSpinner.isInitialized) && (::colourAmountSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) ->
                     StudentFlooditGame(
-                        spinner.selectedItem.toString().split("x")[0].toInt(),
-                        spinner.selectedItem.toString().split("x")[1].toInt(),
-                        colourCount = spinner2.selectedItem.toString().toInt(),
-                        maxTurns = spinner3.selectedItem.toString().toInt()
+                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
+                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
+                        colourCount = colourAmountSpinner.selectedItem.toString().toInt(),
+                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
                         )
-                (::spinner.isInitialized) && (::spinner2.isInitialized) ->
+                (::gridSizeSpinner.isInitialized) && (::colourAmountSpinner.isInitialized) ->
                     StudentFlooditGame(
-                        spinner.selectedItem.toString().split("x")[0].toInt(),
-                        spinner.selectedItem.toString().split("x")[1].toInt(),
-                        colourCount = spinner2.selectedItem.toString().toInt()
+                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
+                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
+                        colourCount = colourAmountSpinner.selectedItem.toString().toInt()
                     )
-                (::spinner2.isInitialized) && (::spinner3.isInitialized) ->
+                (::colourAmountSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) ->
                     StudentFlooditGame(
-                        colourCount = spinner2.selectedItem.toString().toInt(),
-                        maxTurns = spinner3.selectedItem.toString().toInt()
+                        colourCount = colourAmountSpinner.selectedItem.toString().toInt(),
+                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
                     )
-                (::spinner.isInitialized) && (::spinner3.isInitialized) ->
+                (::gridSizeSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) ->
                     StudentFlooditGame(
-                        spinner.selectedItem.toString().split("x")[0].toInt(),
-                        spinner.selectedItem.toString().split("x")[1].toInt(),
-                        maxTurns = spinner3.selectedItem.toString().toInt()
+                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
+                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
+                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
                     )
-                (::spinner.isInitialized) ->
+                (::gridSizeSpinner.isInitialized) ->
                     StudentFlooditGame(
-                        spinner.selectedItem.toString().split("x")[0].toInt(),
-                        spinner.selectedItem.toString().split("x")[1].toInt()
+                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
+                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt()
                     )
-                (::spinner2.isInitialized) ->
+                (::colourAmountSpinner.isInitialized) ->
                     StudentFlooditGame(
-                        colourCount = spinner2.selectedItem.toString().toInt()
+                        colourCount = colourAmountSpinner.selectedItem.toString().toInt()
                     )
-                (::spinner3.isInitialized) ->
+                (::maxTurnSpinner.isInitialized) ->
                     StudentFlooditGame(
-                        maxTurns = spinner3.selectedItem.toString().toInt()
+                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
                     )
                 else -> StudentFlooditGame()
 

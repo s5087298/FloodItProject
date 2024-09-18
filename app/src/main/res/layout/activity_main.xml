@@ -23,33 +23,33 @@
     </LinearLayout>
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/gridSizeSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="18dp"
         app:layout_constraintBottom_toTopOf="@+id/topLayout"
-        app:layout_constraintEnd_toStartOf="@+id/spinner2"
+        app:layout_constraintEnd_toStartOf="@+id/colourAmountSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/colourAmountSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="22dp"
         app:layout_constraintBottom_toTopOf="@+id/topLayout"
-        app:layout_constraintEnd_toStartOf="@+id/spinner3"
-        app:layout_constraintStart_toEndOf="@+id/spinner"
+        app:layout_constraintEnd_toStartOf="@+id/maxTurnSpinner"
+        app:layout_constraintStart_toEndOf="@+id/gridSizeSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinner3"
+        android:id="@+id/maxTurnSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/topLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.37"
-        app:layout_constraintStart_toEndOf="@+id/spinner2"
+        app:layout_constraintStart_toEndOf="@+id/colourAmountSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
