@@ -10,7 +10,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.core.view.GestureDetectorCompat
 import org.example.student.flooditgame.StudentFlooditGame
 import uk.ac.bournemouth.ap.floodit.lib.FlooditGame
@@ -26,6 +28,9 @@ class FlooditView: View {
 
     private lateinit var spinner: Spinner
     private lateinit var spinner2: Spinner
+    private lateinit var spinner3: Spinner
+    private lateinit var roundText: TextView
+    private lateinit var restartButton: Button
 
     var game: StudentFlooditGame = StudentFlooditGame()
 
@@ -123,6 +128,7 @@ class FlooditView: View {
     }
     init {
         val activity = context as MainActivity
+
         spinner = activity.findViewById(R.id.spinner)
         val spinnerItems = listOf("5x5","10x10","14x14","18x18")
         val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
@@ -150,8 +156,7 @@ class FlooditView: View {
                 }
                 invalidate()
             }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         spinner2 = activity.findViewById(R.id.spinner2)
@@ -177,22 +182,95 @@ class FlooditView: View {
                     StudentFlooditGame(colourCount = selectedItem.toInt())
                 invalidate()
             }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        spinner3 = activity.findViewById(R.id.spinner3)
+        val spinner3Items = listOf(20,30,40,50,60,70)
+        val spinner3Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner3Items)
+        spinner3Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner3.adapter = spinner3Adapter
+        spinner3.setSelection(2)
+        spinner3.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedItem = parent!!.getItemAtPosition(position).toString()
+                //game = if (::spinner.isInitialized){
+                //    StudentFlooditGame(
+                //        spinner.selectedItem.toString().split("x")[0].toInt(),
+                //        spinner.selectedItem.toString().split("x")[1].toInt(),
+                //        colourCount = selectedItem.toInt())
+                //} else
+                //    StudentFlooditGame(colourCount = selectedItem.toInt())
+                invalidate()
             }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
+        restartButton = activity.findViewById(R.id.restartButton)
+        restartButton.setOnClickListener{
+            game = when {
+                (::spinner.isInitialized) && (::spinner2.isInitialized) && (::spinner3.isInitialized) ->
+                    StudentFlooditGame(
+                        spinner.selectedItem.toString().split("x")[0].toInt(),
+                        spinner.selectedItem.toString().split("x")[1].toInt(),
+                        colourCount = spinner2.selectedItem.toString().toInt(),
+                        maxTurns = spinner3.selectedItem.toString().toInt()
+                        )
+                (::spinner.isInitialized) && (::spinner2.isInitialized) ->
+                    StudentFlooditGame(
+                        spinner.selectedItem.toString().split("x")[0].toInt(),
+                        spinner.selectedItem.toString().split("x")[1].toInt(),
+                        colourCount = spinner2.selectedItem.toString().toInt()
+                    )
+                (::spinner2.isInitialized) && (::spinner3.isInitialized) ->
+                    StudentFlooditGame(
+                        colourCount = spinner2.selectedItem.toString().toInt(),
+                        maxTurns = spinner3.selectedItem.toString().toInt()
+                    )
+                (::spinner.isInitialized) && (::spinner3.isInitialized) ->
+                    StudentFlooditGame(
+                        spinner.selectedItem.toString().split("x")[0].toInt(),
+                        spinner.selectedItem.toString().split("x")[1].toInt(),
+                        maxTurns = spinner3.selectedItem.toString().toInt()
+                    )
+                (::spinner.isInitialized) ->
+                    StudentFlooditGame(
+                        spinner.selectedItem.toString().split("x")[0].toInt(),
+                        spinner.selectedItem.toString().split("x")[1].toInt()
+                    )
+                (::spinner2.isInitialized) ->
+                    StudentFlooditGame(
+                        colourCount = spinner2.selectedItem.toString().toInt()
+                    )
+                (::spinner3.isInitialized) ->
+                    StudentFlooditGame(
+                        maxTurns = spinner3.selectedItem.toString().toInt()
+                    )
+                else -> StudentFlooditGame()
+
+            }
         }
         post {
             val viewWidth = this.width
             val viewHeight = this.height
+            roundText = activity.findViewById(R.id.textView)
+            roundText.setText("${game.round}/${game.maxTurns}")
             gestureDetector = GestureDetectorCompat(context, object:
                 GestureDetector.SimpleOnGestureListener(){
-
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
                     if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null &&
                         game.state==FlooditGame.State.RUNNING){
                         game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colorId)
+                    }
+                    roundText.setText("${game.round}/${game.maxTurns}")
+                    if (game.state != FlooditGame.State.RUNNING){
+                        roundText.setText("${game.round}/${game.maxTurns} YOU " + game.state.toString())
                     }
                     invalidate()
                     return true

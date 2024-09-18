@@ -57,10 +57,11 @@ class StudentFlooditGame(
             box.colorId=clr
         }
         notifyMove(round)
-        if (round>=maxTurns || boxes.all { it.colorId == clr})  {
-            notifyWin(round)
-        } else
-            round++
+        when {
+            round>=maxTurns -> state = FlooditGame.State.LOST
+            boxes.all {it.colorId == clr} -> state = FlooditGame.State.WON
+            else -> round++
+        }
     }
     private val onGameOverListeners = mutableListOf<FlooditGame.GameOverListener>()
     private val onGamePlayListeners = mutableListOf<FlooditGame.GamePlayListener>()
