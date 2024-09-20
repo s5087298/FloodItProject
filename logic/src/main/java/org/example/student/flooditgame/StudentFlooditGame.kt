@@ -64,7 +64,7 @@ class StudentFlooditGame(
                         }
                     }
                 }
-            }
+            } // check if last iteration did not add any new boxes
             if (adjacentBoxes == adjacentBoxesList) {
                 repeat = false
             }
@@ -79,15 +79,10 @@ class StudentFlooditGame(
         }
     }
     fun computerMoveSimple(): Pair<Int,Int>{
-        val pickedColour = (0..<colourCount).random()
+        val pickedBox = boxes[(0..<width).random(),(0..<height).random()]
+        val pickedColour = pickedBox.colourId
         playColour(pickedColour)
-        var boxPlayedCoordinate = Pair(0,0)
-        for (box in boxes){
-            if (box.colourId == pickedColour){
-                boxPlayedCoordinate = Pair(box.boxY, box.boxX)
-            }
-        }
-        return boxPlayedCoordinate
+        return Pair(pickedBox.boxY,pickedBox.boxX)
     }
     fun computerMove(): Pair<Int, Int> {
         val adjacentBoxes: MutableList<Box> = mutableListOf(boxes[0, 0])
@@ -102,14 +97,14 @@ class StudentFlooditGame(
                         }
                     }
                 }
-            }
+            } // check if last iteration did not add any new boxes
             if (adjacentBoxes == adjacentBoxesList) {
                 repeat = false
             }
         }
         val adjacentBoxesDifferentColours: MutableList<Box> = mutableListOf()
         val adjacentBoxesDifferentColoursID: MutableList<Int> = mutableListOf()
-        for (box in adjacentBoxes) {
+        for (box in adjacentBoxes) { // check all adjacent boxes with different colours
             for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
                 if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].colourId != box.colourId) {
                     adjacentBoxesDifferentColoursID.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second].colourId)
@@ -118,7 +113,7 @@ class StudentFlooditGame(
                     }
                 }
             }
-        }
+        } // count the most frequent border colour an play it, use boxPlayCoordinate to display where AI made move
         val mostEncounteredColourID: Int = (adjacentBoxesDifferentColoursID.groupingBy { it }.eachCount()).maxByOrNull { it.value }!!.key
         var boxPlayedCoordinate: Pair<Int, Int> = Pair(0,0)
         for (box in adjacentBoxesDifferentColours){
@@ -178,9 +173,8 @@ class StudentFlooditGame(
         require(maxTurns>0){
             "there must be at least 1 turn"
         }
-        require(colourCount>1)
-        //require(width*height>=colourCount){
-        //   "colour amount should be more than maximum allowed colours"
-        //}
+        require(colourCount>1) {
+            "there must be at least 1 colour"
+        }
     }
 }
