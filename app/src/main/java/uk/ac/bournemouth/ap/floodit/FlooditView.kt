@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.GestureDetectorCompat
+import kotlinx.coroutines.*
 import org.example.student.flooditgame.StudentFlooditGame
 import uk.ac.bournemouth.ap.floodit.lib.FlooditGame
 
@@ -28,6 +29,7 @@ class FlooditView: View {
     private lateinit var gridSizeSpinner: Spinner
     private lateinit var colourAmountSpinner: Spinner
     private lateinit var maxTurnSpinner: Spinner
+    private lateinit var aiSpinner: Spinner
     private lateinit var roundText: TextView
     private lateinit var restartButton: Button
 
@@ -131,70 +133,59 @@ class FlooditView: View {
         roundText = activity.findViewById(R.id.textView)
 
         gridSizeSpinner = activity.findViewById(R.id.gridSizeSpinner)
-        val spinnerItems = listOf("5x5","10x10","14x14","18x18")
-        val spinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinnerItems)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        gridSizeSpinner.adapter = spinnerAdapter
+        val gridSizeSpinnerItems = listOf("5x5","10x10","14x14","18x18")
+        val gridSizeSpinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,gridSizeSpinnerItems)
+        gridSizeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        gridSizeSpinner.adapter = gridSizeSpinnerAdapter
         gridSizeSpinner.setSelection(1)
 
         colourAmountSpinner = activity.findViewById(R.id.colourAmountSpinner)
-        val spinner2Items = listOf(3,4,5,6)
-        val spinner2Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner2Items)
-        spinner2Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        colourAmountSpinner.adapter = spinner2Adapter
+        val colourAmountSpinnerItems = listOf(3,4,5,6)
+        val colourAmountSpinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,colourAmountSpinnerItems)
+        colourAmountSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        colourAmountSpinner.adapter = colourAmountSpinnerAdapter
         colourAmountSpinner.setSelection(3)
 
         maxTurnSpinner = activity.findViewById(R.id.maxTurnSpinner)
-        val spinner3Items = listOf(20,30,40,50,60,70)
-        val spinner3Adapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,spinner3Items)
-        spinner3Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        maxTurnSpinner.adapter = spinner3Adapter
+        val maxTurnSpinnerItems = listOf(20,30,40,50,60,70)
+        val maxTurnSpinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,maxTurnSpinnerItems)
+        maxTurnSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        maxTurnSpinner.adapter = maxTurnSpinnerAdapter
         maxTurnSpinner.setSelection(2)
 
+        aiSpinner = activity.findViewById(R.id.aiSpinner)
+        val aiSpinnerItems = listOf("PLAYER", "SIMPLE AI", "STANDARD AI")
+        val aiSpinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,aiSpinnerItems)
+        aiSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        aiSpinner.adapter = aiSpinnerAdapter
+
+        var aiMoveCoroutine: Job? = null
         restartButton = activity.findViewById(R.id.restartButton)
         restartButton.setOnClickListener{
-            game = when {
-                (::gridSizeSpinner.isInitialized) && (::colourAmountSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) ->
-                    StudentFlooditGame(
-                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
-                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
-                        colourCount = colourAmountSpinner.selectedItem.toString().toInt(),
-                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
-                        )
-                (::gridSizeSpinner.isInitialized) && (::colourAmountSpinner.isInitialized) ->
-                    StudentFlooditGame(
-                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
-                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
-                        colourCount = colourAmountSpinner.selectedItem.toString().toInt()
-                    )
-                (::colourAmountSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) ->
-                    StudentFlooditGame(
-                        colourCount = colourAmountSpinner.selectedItem.toString().toInt(),
-                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
-                    )
-                (::gridSizeSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) ->
-                    StudentFlooditGame(
-                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
-                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
-                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
-                    )
-                (::gridSizeSpinner.isInitialized) ->
-                    StudentFlooditGame(
-                        gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
-                        gridSizeSpinner.selectedItem.toString().split("x")[1].toInt()
-                    )
-                (::colourAmountSpinner.isInitialized) ->
-                    StudentFlooditGame(
-                        colourCount = colourAmountSpinner.selectedItem.toString().toInt()
-                    )
-                (::maxTurnSpinner.isInitialized) ->
-                    StudentFlooditGame(
-                        maxTurns = maxTurnSpinner.selectedItem.toString().toInt()
-                    )
-                else -> StudentFlooditGame()
-
-            }
+            game = if ((::gridSizeSpinner.isInitialized) && (::colourAmountSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) && (::aiSpinner.isInitialized))
+                StudentFlooditGame(
+                    gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
+                    gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
+                    colourCount = colourAmountSpinner.selectedItem.toString().toInt(),
+                    maxTurns = maxTurnSpinner.selectedItem.toString().toInt(),
+                    computerGame = aiSpinner.selectedItemPosition
+                )
+             else
+                StudentFlooditGame()
             invalidate()
+            aiMoveCoroutine?.cancel()
+            aiMoveCoroutine = CoroutineScope(Dispatchers.Main).launch {
+                while (game.state==FlooditGame.State.RUNNING && game.computerGame != 0){
+                    delay(2000)
+                    if (game.computerGame == 1) game.computerMoveSimple()
+                    else game.computerMove()
+                    roundText.setText("${game.round}/${game.maxTurns}")
+                    if (game.state != FlooditGame.State.RUNNING){
+                        roundText.setText("${game.round}/${game.maxTurns} YOU " + game.state.toString())
+                    }
+                    invalidate()
+                }
+            }
             roundText.setText("${game.round}/${game.maxTurns}")
         }
         restartButton.performClick()
@@ -206,18 +197,20 @@ class FlooditView: View {
                 GestureDetector.SimpleOnGestureListener(){
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null &&
-                        game.state==FlooditGame.State.RUNNING){
-                        game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colorId)
+                    if (game.computerGame == 0){
+                        if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null &&
+                            game.state==FlooditGame.State.RUNNING){
+                            game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colorId)
+                        }
+                        roundText.setText("${game.round}/${game.maxTurns}")
+                        if (game.state != FlooditGame.State.RUNNING){
+                            roundText.setText("${game.round}/${game.maxTurns} YOU " + game.state.toString())
+                        }
+                        invalidate()
                     }
-                    roundText.setText("${game.round}/${game.maxTurns}")
-                    if (game.state != FlooditGame.State.RUNNING){
-                        roundText.setText("${game.round}/${game.maxTurns} YOU " + game.state.toString())
-                    }
-                    invalidate()
                     return true
                 }
             })
+            }
         }
-    }
 }

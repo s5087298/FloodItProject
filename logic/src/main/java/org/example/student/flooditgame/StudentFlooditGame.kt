@@ -8,9 +8,10 @@ class StudentFlooditGame(
     override val height: Int = 5,
     override val maxTurns: Int = 40,
     override val colourCount: Int = 6,
+    val computerGame: Int = 0
 ) : FlooditGame {
     var boxes: Matrix<Box> = Matrix(width, height) { x: Int, y: Int -> Box(x,y)}
-    inner class Box(private val boxX: Int, private val boxY: Int){
+    inner class Box(val boxX: Int, val boxY: Int){
         var colorId: Int = (0..<colourCount).random()
             set (newValue) {
                 require(newValue in 0..<colourCount){
@@ -76,6 +77,50 @@ class StudentFlooditGame(
         if (state != FlooditGame.State.RUNNING){
             notifyWin(round)
         }
+    }
+    fun computerMoveSimple(){
+        playColour((0..<colourCount).random())
+    }
+    fun computerMove(): Pair<Int, Int> {
+        val adjacentBoxes: MutableList<Box> = mutableListOf(boxes[0, 0])
+        var repeat = true
+        while (repeat && state == FlooditGame.State.RUNNING) {
+            val adjacentBoxesList = adjacentBoxes.toList()
+            for (box in adjacentBoxesList) {
+                for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
+                    if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].colorId == box.colorId) {
+                        if (adjacentBoxes.indexOf(boxes[adjacentCoordinates.first, adjacentCoordinates.second]) == -1) {
+                            adjacentBoxes.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second])
+                        }
+                    }
+                }
+            }
+            if (adjacentBoxes == adjacentBoxesList) {
+                repeat = false
+            }
+        }
+        val adjacentBoxesDifferentColours: MutableList<Box> = mutableListOf()
+        val adjacentBoxesDifferentColoursID: MutableList<Int> = mutableListOf()
+        for (box in adjacentBoxes) {
+            for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
+                if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].colorId != box.colorId) {
+                    adjacentBoxesDifferentColoursID.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second].colorId)
+                    if (adjacentBoxes.indexOf(boxes[adjacentCoordinates.first, adjacentCoordinates.second]) == -1){
+                        adjacentBoxesDifferentColours.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second])
+                    }
+                }
+            }
+        }
+        val mostEncounteredColourID: Int = (adjacentBoxesDifferentColoursID.groupingBy { it }.eachCount()).maxByOrNull { it.value }!!.key
+        var boxPlayedCoordinate: Pair<Int, Int> = Pair(0,0)
+        for (box in adjacentBoxesDifferentColours){
+            if (box.colorId == mostEncounteredColourID){
+                boxPlayedCoordinate = Pair(box.boxX, box.boxY)
+                break
+            }
+        }
+        playColour(mostEncounteredColourID)
+        return boxPlayedCoordinate
     }
     private val onGameOverListeners = mutableListOf<FlooditGame.GameOverListener>()
     private val onGamePlayListeners = mutableListOf<FlooditGame.GamePlayListener>()

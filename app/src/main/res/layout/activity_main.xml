@@ -73,4 +73,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topLayout"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/aiSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/restartButton"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/topLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
