@@ -124,6 +124,7 @@ class StudentFlooditGame(
         for (box in adjacentBoxesDifferentColours){
             if (box.colourId == mostEncounteredColourID){
                 boxPlayedCoordinate = Pair(box.boxY, box.boxX)
+                break
             }
         }
         playColour(mostEncounteredColourID)

@@ -40,10 +40,15 @@ class FlooditView: View {
         style = Paint.Style.FILL
         color = Color.WHITE
     }
-    private val borerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val borderPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         color = Color.BLACK
         strokeWidth = 20f
+    }
+    private val outerCirclePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        color = Color.BLACK
+        strokeWidth = 10f
     }
     private val color0: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -127,7 +132,7 @@ class FlooditView: View {
             spaceFromLeft - 10f,
             spaceFromTop - 10f,
             squareSpacingX * (game.width+1) + 10f - spaceFromLeft,
-            squareSpacingY * (game.height+1) - spaceFromTop + 10f, borerPaint)
+            squareSpacingY * (game.height+1) - spaceFromTop + 10f, borderPaint)
 
         for (row in 0 until  game.width){
             val y = ((squareSpacingY) * (row)) + spaceFromTop
@@ -143,7 +148,12 @@ class FlooditView: View {
                 spaceFromLeft + computerPointer.first.toFloat() * squareSpacingX + squareSpacingX/2,
                 spaceFromTop + computerPointer.second.toFloat() * squareSpacingY + squareSpacingY/2,
                 10f, color7)
+            canvas.drawCircle(
+                spaceFromLeft + computerPointer.first.toFloat() * squareSpacingX + squareSpacingX/2,
+                spaceFromTop + computerPointer.second.toFloat() * squareSpacingY + squareSpacingY/2,
+                30f, outerCirclePaint)
         }
+
     }
     init {
         val activity = context as MainActivity
@@ -172,7 +182,7 @@ class FlooditView: View {
         maxTurnSpinner.setSelection(2)
 
         aiSpinner = activity.findViewById(R.id.aiSpinner)
-        val aiSpinnerItems = listOf("PLAYER", "SIMPLE AI", "STANDARD AI")
+        val aiSpinnerItems = listOf("PLAYER", "EASY AI", "HARD AI")
         val aiSpinnerAdapter = ArrayAdapter(activity,android.R.layout.simple_spinner_dropdown_item,aiSpinnerItems)
         aiSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         aiSpinner.adapter = aiSpinnerAdapter
