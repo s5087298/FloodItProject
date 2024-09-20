@@ -25,7 +25,6 @@ class FlooditView: View {
         attrs,
         defStyleAttr
     )
-
     private lateinit var gridSizeSpinner: Spinner
     private lateinit var colourAmountSpinner: Spinner
     private lateinit var maxTurnSpinner: Spinner
@@ -82,7 +81,7 @@ class FlooditView: View {
         style = Paint.Style.FILL
         color = Color.BLACK
     }
-
+// converts colour id to colour value
     private fun boxColour(colorIndex: Int): Paint {
         return when (colorIndex) {
             0 -> color0
@@ -97,7 +96,7 @@ class FlooditView: View {
     }
 
     private lateinit var gestureDetector: GestureDetectorCompat
-
+// determines pressed box using coordinates
     fun coordinateConverter(x: Float,y: Float, canvasWidth: Float, canvasHeight: Float): StudentFlooditGame.Box? {
         val gameWidth = game.width.toFloat()
         val gameHeight = game.height.toFloat()
@@ -155,7 +154,7 @@ class FlooditView: View {
         }
 
     }
-    init {
+    init {// declaring activities outside of this view
         val activity = context as MainActivity
 
         roundText = activity.findViewById(R.id.textView)
@@ -190,10 +189,14 @@ class FlooditView: View {
         var aiMoveCoroutine: Job? = null
         restartButton = activity.findViewById(R.id.restartButton)
         restartButton.setOnClickListener{
-            game = if ((::gridSizeSpinner.isInitialized) && (::colourAmountSpinner.isInitialized) && (::maxTurnSpinner.isInitialized) && (::aiSpinner.isInitialized))
+            game = if ( // just in case the values of other activities aren't initialized to avoid crashes
+                (::gridSizeSpinner.isInitialized) &&
+                (::colourAmountSpinner.isInitialized) &&
+                (::maxTurnSpinner.isInitialized) &&
+                (::aiSpinner.isInitialized))
                 StudentFlooditGame(
-                    gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
-                    gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
+                    width = gridSizeSpinner.selectedItem.toString().split("x")[0].toInt(),
+                    height = gridSizeSpinner.selectedItem.toString().split("x")[1].toInt(),
                     colourCount = colourAmountSpinner.selectedItem.toString().toInt(),
                     maxTurns = maxTurnSpinner.selectedItem.toString().toInt(),
                     computerGame = aiSpinner.selectedItemPosition
@@ -201,7 +204,7 @@ class FlooditView: View {
              else
                 StudentFlooditGame()
             invalidate()
-            aiMoveCoroutine?.cancel()
+            aiMoveCoroutine?.cancel() // coroutine to allow AI's to make turns and for player to follow them
             aiMoveCoroutine = CoroutineScope(Dispatchers.Main).launch {
                 while (game.state==FlooditGame.State.RUNNING && game.computerGame != 0){
                     delay(2000)
@@ -217,9 +220,9 @@ class FlooditView: View {
                 }
             }
             roundText.setText("${game.round}/${game.maxTurns}")
-        }
+        } // using button to initialize the values in other activities immediately
         restartButton.performClick()
-        post {
+        post { // using post to get access to the dimensions of the canvas
             val viewWidth = this.width
             val viewHeight = this.height
             roundText.setText("${game.round}/${game.maxTurns}")
@@ -228,7 +231,9 @@ class FlooditView: View {
                 override fun onDown(e: MotionEvent): Boolean = true
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
                     if (game.computerGame == 0){
-                        if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null &&
+                        if (coordinateConverter(
+                                e.x, e.y, viewWidth.toFloat(),
+                                viewHeight.toFloat())!=null &&
                             game.state==FlooditGame.State.RUNNING){
                             game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colourId)
                         }

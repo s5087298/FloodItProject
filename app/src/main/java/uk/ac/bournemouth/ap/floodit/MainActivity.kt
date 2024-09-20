@@ -17,12 +17,12 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
+        }// declaring the FloodItView programmatically to be able to tie it to other activities
         val floodItView = FlooditView(this)
         floodItView.layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        ) // parent layout
         val topLayout = findViewById<LinearLayout>(R.id.topLayout)
         topLayout.addView(floodItView)
         supportActionBar?.hide()

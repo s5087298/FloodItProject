@@ -78,13 +78,13 @@ class StudentFlooditGame(
             notifyWin(round)
         }
     }
-    fun computerMoveSimple(): Pair<Int,Int>{
+    fun computerMoveSimple(): Pair<Int,Int>{// picks random box and plays it
         val pickedBox = boxes[(0..<width).random(),(0..<height).random()]
         val pickedColour = pickedBox.colourId
-        playColour(pickedColour)
+        playColour(pickedColour) // return coordinates of played box to display where AI made move
         return Pair(pickedBox.boxY,pickedBox.boxX)
     }
-    fun computerMove(): Pair<Int, Int> {
+    fun computerMove(): Pair<Int, Int> {// picks box based on the largest amount of colour around current flood borders
         val adjacentBoxes: MutableList<Box> = mutableListOf(boxes[0, 0])
         var repeat = true
         while (repeat && state == FlooditGame.State.RUNNING) {
@@ -113,7 +113,7 @@ class StudentFlooditGame(
                     }
                 }
             }
-        } // count the most frequent border colour an play it, use boxPlayCoordinate to display where AI made move
+        } // count the most frequent border colour and play it, use boxPlayCoordinate to display where AI made move
         val mostEncounteredColourID: Int = (adjacentBoxesDifferentColoursID.groupingBy { it }.eachCount()).maxByOrNull { it.value }!!.key
         var boxPlayedCoordinate: Pair<Int, Int> = Pair(0,0)
         for (box in adjacentBoxesDifferentColours){
