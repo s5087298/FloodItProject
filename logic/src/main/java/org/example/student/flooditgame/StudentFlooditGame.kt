@@ -71,22 +71,29 @@ class StudentFlooditGame(
         for (box in adjacentBoxes){
             box.colorId=clr
         }
-        notifyMove(round)
         round++
+        notifyMove(round)
+        if (state != FlooditGame.State.RUNNING){
+            notifyWin(round)
+        }
     }
     private val onGameOverListeners = mutableListOf<FlooditGame.GameOverListener>()
     private val onGamePlayListeners = mutableListOf<FlooditGame.GamePlayListener>()
 
-    override fun addGameOverListener(listener: FlooditGame.GameOverListener) {
-        onGameOverListeners.add(listener)
+    override fun addGameOverListener(gameOverListener: FlooditGame.GameOverListener) {
+        if (onGameOverListeners.indexOf(gameOverListener)==-1){
+            onGameOverListeners.add(gameOverListener)
+        }
     }
 
     override fun addGamePlayListener(listener: FlooditGame.GamePlayListener) {
-        onGamePlayListeners.add(listener)
+        if (onGamePlayListeners.indexOf(listener)==-1){
+            onGamePlayListeners.add(listener)
+        }
     }
 
-    override fun removeGameOverListener(listener: FlooditGame.GameOverListener) {
-        onGameOverListeners.remove(listener)
+    override fun removeGameOverListener(gameOverListener: FlooditGame.GameOverListener) {
+        onGameOverListeners.remove(gameOverListener)
     }
 
     override fun removeGamePlayListener(listener: FlooditGame.GamePlayListener) {
@@ -95,13 +102,17 @@ class StudentFlooditGame(
 
     override fun notifyWin(round: Int) {
         for(listener in onGameOverListeners) {
-            listener.onGameOver(this, this.round, (round<=maxTurns))
+            var isWon: Boolean = false
+            if (state == FlooditGame.State.WON){
+                isWon = true
+            }
+            listener.onGameOver(this, round, isWon)
         }
     }
 
     override fun notifyMove(round: Int) {
         for(listener in onGamePlayListeners) {
-            listener.onGameChanged(this, this.round)
+            listener.onGameChanged(this, round)
         }
     }
     init {
