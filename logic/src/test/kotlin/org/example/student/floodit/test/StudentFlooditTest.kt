@@ -24,7 +24,7 @@ class StudentFlooditTest : FlooditTest() {
         val game = StudentFlooditGame(width = colours.width, height = colours.height, colourCount=colourCount, maxTurns = maxTurns)
         for (coloursX in 0 until colours.width){
             for (coloursY in 0 until colours.height){
-                game.boxes[coloursX,coloursY].colorId = colours[coloursX,coloursY]
+                game.boxes[coloursX,coloursY].colourId = colours[coloursX,coloursY]
             }
         }
         return game

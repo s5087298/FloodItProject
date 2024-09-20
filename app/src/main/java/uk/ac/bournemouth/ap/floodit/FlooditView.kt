@@ -32,12 +32,18 @@ class FlooditView: View {
     private lateinit var aiSpinner: Spinner
     private lateinit var roundText: TextView
     private lateinit var restartButton: Button
+    private lateinit var computerPointer: Pair<Int,Int>
 
     var game: StudentFlooditGame = StudentFlooditGame()
 
     private val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.WHITE
+    }
+    private val borerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        color = Color.BLACK
+        strokeWidth = 20f
     }
     private val color0: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -105,6 +111,7 @@ class FlooditView: View {
         return true
     }
 
+
     override fun onDraw(canvas: Canvas) {
         val canvasWidth = width.toFloat()
         val canvasHeight = height.toFloat()
@@ -116,6 +123,11 @@ class FlooditView: View {
         val spaceFromTop = squareSpacingY/2
 
         canvas.drawRect(0f, 0f, canvasWidth, canvasHeight, gridPaint)
+        canvas.drawRect(
+            spaceFromLeft - 10f,
+            spaceFromTop - 10f,
+            squareSpacingX * (game.width+1) + 10f - spaceFromLeft,
+            squareSpacingY * (game.height+1) - spaceFromTop + 10f, borerPaint)
 
         for (row in 0 until  game.width){
             val y = ((squareSpacingY) * (row)) + spaceFromTop
@@ -123,8 +135,14 @@ class FlooditView: View {
             for (col in 0 until game.height){
                 val x = ((squareSpacingX) * (col)) + spaceFromLeft
                 val xEnd = ((squareSpacingX) * (col+1)) + spaceFromLeft
-                canvas.drawRect(x,y,xEnd,yEnd,boxColour(game.boxes[row,col].colorId))
+                canvas.drawRect(x,y,xEnd,yEnd,boxColour(game.boxes[row,col].colourId))
             }
+        }
+        if (::computerPointer.isInitialized && game.computerGame !=0 && game.round != 0){
+            canvas.drawCircle(
+                spaceFromLeft + computerPointer.first.toFloat() * squareSpacingX + squareSpacingX/2,
+                spaceFromTop + computerPointer.second.toFloat() * squareSpacingY + squareSpacingY/2,
+                10f, color7)
         }
     }
     init {
@@ -177,8 +195,10 @@ class FlooditView: View {
             aiMoveCoroutine = CoroutineScope(Dispatchers.Main).launch {
                 while (game.state==FlooditGame.State.RUNNING && game.computerGame != 0){
                     delay(2000)
-                    if (game.computerGame == 1) game.computerMoveSimple()
-                    else game.computerMove()
+                    when (game.computerGame) {
+                        1 -> computerPointer = game.computerMoveSimple()
+                        2 -> computerPointer = game.computerMove()
+                    }
                     roundText.setText("${game.round}/${game.maxTurns}")
                     if (game.state != FlooditGame.State.RUNNING){
                         roundText.setText("${game.round}/${game.maxTurns} YOU " + game.state.toString())
@@ -200,7 +220,7 @@ class FlooditView: View {
                     if (game.computerGame == 0){
                         if (coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!=null &&
                             game.state==FlooditGame.State.RUNNING){
-                            game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colorId)
+                            game.playColour(coordinateConverter(e.x, e.y, viewWidth.toFloat(),viewHeight.toFloat())!!.colourId)
                         }
                         roundText.setText("${game.round}/${game.maxTurns}")
                         if (game.state != FlooditGame.State.RUNNING){
