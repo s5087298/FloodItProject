@@ -107,9 +107,9 @@ class StudentFlooditGame(
         for (box in adjacentBoxes) { // check all adjacent boxes with different colours
             for (adjacentCoordinates in box.adjacentBoxesCoordinates) {
                 if (boxes[adjacentCoordinates.first, adjacentCoordinates.second].colourId != box.colourId) {
-                    adjacentBoxesDifferentColoursID.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second].colourId)
                     if (adjacentBoxes.indexOf(boxes[adjacentCoordinates.first, adjacentCoordinates.second]) == -1){
                         adjacentBoxesDifferentColours.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second])
+                        adjacentBoxesDifferentColoursID.add(boxes[adjacentCoordinates.first, adjacentCoordinates.second].colourId)
                     }
                 }
             }
